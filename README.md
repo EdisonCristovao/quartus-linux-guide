@@ -29,16 +29,16 @@ Depois de ter baixado o arquivo completo `Quartus-lite-16.0.0.211-linux.tar`, ex
 ```tar -zxvf Quartus-lite-16.0.0.211-linux.tar```
 Obtendo algo assim.
 ```
-	*setup.sh
-	*/componets
-		*arria_lite-16.0.0.211.qdz
-		*cyclonev-16.0.0.211.qdz  
-		*max-16.0.0.211.qdz
-		*QuartusHelpSetup-16.0.0.211-linux.run
-		*cyclone-16.0.0.211.qdz
-		*max10-16.0.0.211.qdz
-		*ModelSimSetup-16.0.0.211-linux.run
-		*QuartusLiteSetup-16.0.0.211-linux.run
+	setup.sh
+	/componets
+		arria_lite-16.0.0.211.qdz
+		cyclonev-16.0.0.211.qdz  
+		max-16.0.0.211.qdz
+		QuartusHelpSetup-16.0.0.211-linux.run
+		cyclone-16.0.0.211.qdz
+		max10-16.0.0.211.qdz
+		ModelSimSetup-16.0.0.211-linux.run
+		QuartusLiteSetup-16.0.0.211-linux.run
 ```
 
 O `setup.sh` precisa ter permisao de execução.
@@ -55,3 +55,48 @@ Use o comando acima para iniciar a instalação.
 
 a instalação padrao tentara instalar em `/root/altera/xx.x/`, recomenda-se que seja instalado em `/opt/altera/xx.x/`.
 
+###Executando Quartus
+
+Assumindo que o quartus foi instalado em `/opt/altera/xx.x`, seu binario estara localizado em `/opt/altera/15.1/quartus/bin`. Rode quartus (64bits versão).
+```
+$ /opt/altera/xx.x/quartus/bin/quartus --64bit
+```
+ou 32 bits versão:
+```
+$ /opt/altera/15.1/quartus/bin/quartus
+```
+
+###Integrando Quartus com o Linux
+
+Tentando digitar `$ quartus` nota-se que o comando nao existe, pode se criar o comando criando um arquivo `quartus.sh` dentro da pasta `/etc/profile.d/`.
+
+```
+/etc/profile.d/quartus.sh
+...............................................
+export PATH=$PATH:/opt/altera/xx.x/quartus/bin
+```
+O arquivo precisa ser executavel
+```
+# chmod +x /etc/profile.d/quartus.sh
+```
+Os script's inseridos em `/etc/profile.d` na mesma sessão nao funcionam sem reeniciar o sistema, paranao precisar reeniciar pode-se executar o comando.
+```
+$ source /etc/profile.d/quartus.sh
+```
+
+###Atalho application
+
+Tambem pode se criar um atalho na pasta application. Crie um arquivo `quartus.desktop` dentro da pasta `~/.local/share/applications`.
+```
+~/.local/share/applications/quartus.desktop
+...............................................
+[Desktop Entry]
+Version=1.0
+Name=Quartus Prime Standard Edition v15.1
+Comment=Quartus Prime design software for Altera FPGA's
+Exec=/opt/altera/15.1/quartus/bin/quartus --64bit
+Icon=/opt/altera/15.1/quartus/adm/quartusii.png
+Terminal=false
+Type=Application
+Categories=Development
+```
