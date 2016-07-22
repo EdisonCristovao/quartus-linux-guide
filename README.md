@@ -111,6 +111,18 @@ A instalação é feita junto com o quartus se voce baixou a versão completa. C
 ```
 Se o diretorio de instalação foi o `/opt`, entao o modelsim foi instalado em `/opt/altera/15.1/modelsim_ase`.
 
+crie um comando para abrir o modelsim como foi feito com o quartus.
+
+```
+vsim.sh
+..........................................
+export PATH=$PATH:/opt/altera/xx.x/modelsim_ase/bin
+```
+Para nao reeniciar o sistema use `source`.
+```
+$ source /etc/profile.d/vsim.sh
+```
+
 ###Compatibilidade
 
 Em algumas distros, ao iniciar modelsim com o comando `$ vsim`, gera o erro descrito abaixo.
@@ -118,7 +130,7 @@ Em algumas distros, ao iniciar modelsim com o comando `$ vsim`, gera o erro desc
 $ vsim
 Error: cannot find "/opt/altera/xx.x/modelsim_ase/bin/../linux_rh60/vsim"
 ```
-A soluçao é bem simples, edite o arquivo `vco` no diretorio `/opt/altera/xx.x/modelsim_ase/` como é sugerido.
+A soluçao é bem simples, edite o arquivo `vco` na linha 206, diretorio `/opt/altera/xx.x/modelsim_ase/` como é sugerido.
 ```
 /opt/altera/xx.x/modelsim_ae/vco line 206
  *)                vco="linux_rh60" ;;
@@ -149,4 +161,60 @@ Initialization problem, exiting.
    (file "/opt/questasim/linux_x86_64/../tcl/vsim/vsim" line 1)
 ** Fatal: Read failure in vlm process (0,0)
 ```
+Existe tres soluçoes possiveis. Voce pode tentar um downgrade do pacote freetype2, voce pode procurar a vesão especifica na internet e instalar, ou voce pode usar os libs que estao nesse repositorio do git.
+Nesse tutorial sera usada as libs disponiveis aqui nesse repositorio.
+
+crie um arquivo `lib32` dentro de `/opt/altera/xx.x/modelsim_ase/` e execute os comandos.
+
+para entrar dentro da pasta criada. 
+```
+$ cd /opt/altera/xx.x/modelsim_ase/lib32
+```
+Sera necessario tres arquivos que estão em `/lib`.
+```
+libfreetype.so
+libfreetype.so.6
+libfreetype.so.6.10.2 ou libfreetype.so.6.10.1 
+```
+se os arquivos forem exatamente esses, copie para a pasta criada em `/opt/altera/xx.x/modelsim_ase/lib32`
+caso algum arquivo esteja mais atualizado, use os arquivos desse repositorio executando o comando abaixo.
+```
+$ wget https://github.com/JuniJoker/quartus-linux-guide/blob/master/libfreetype/libfreetype.tar.gz
+```
+Extraia os arquivos
+```
+$ tar -zxvf libfreetype.tar.gz
+```
+Com as lib na pasta correta, edite o arquivo `vco` no diretorio `/opt/altera/xx.x/modelsim_ase/` adicionando a linha abaixo depois de `#!/bin/bash`
+```
+export LD_LIBRARY_PATH=/opt/altera/xx.x/modelsim_ase/lib32
+```
+O script pode precisar de permisao de escrita.
+
+###Atalho application
+
+Tambem pode se criar um atalho na pasta application. Crie um arquivo `modelsim.desktop` dentro da pasta `~/.local/share/applications`.
+```
+~/.local/share/applications/modelsim.desktop
+...............................................
+[Desktop Entry]
+Version=1.0
+Name=ModelSim-Altera Edition
+Comment=ModelSim simulation software for Altera FPGA's
+Exec=/opt/altera/15.1/modelsim_ae/bin/vsim
+Icon=/opt/altera/15.1/modelsim_ae/modesim.gif
+Terminal=true
+Type=Application
+Categories=Development
+```
+
+.........................................................................................
+
+Fonte [https://wiki.archlinux.org/index.php/Altera_Design_Software](https://wiki.archlinux.org/index.php/Altera_Design_Software).
+
+
+
+
+
+
 
