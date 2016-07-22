@@ -100,3 +100,53 @@ Terminal=false
 Type=Application
 Categories=Development
 ```
+
+##Modelsim-Altera Edition
+
+###intall
+
+A instalação é feita junto com o quartus se voce baixou a versão completa. Caso tenha baixado em partes, é preciso dar permissão de execução e inciar a instalação.
+```
+# ./modelsim.xx.x.run
+```
+Se o diretorio de instalação foi o `/opt`, entao o modelsim foi instalado em `/opt/altera/15.1/modelsim_ase`.
+
+###Compatibilidade
+
+Em algumas distros, ao iniciar modelsim com o comando `$ vsim`, gera o erro descrito abaixo.
+```
+$ vsim
+Error: cannot find "/opt/altera/xx.x/modelsim_ase/bin/../linux_rh60/vsim"
+```
+A soluçao é bem simples, edite o arquivo `vco` no diretorio `/opt/altera/xx.x/modelsim_ase/` como é sugerido.
+```
+/opt/altera/xx.x/modelsim_ae/vco line 206
+ *)                vco="linux_rh60" ;;
+```
+para
+```
+/opt/altera/xx.x/modelsim_ae/vco line 206
+ *)                vco="linux" ;;
+```
+Pode ser necessario permisao de escrita.
+
+### freetype2 2.5.0.1-1
+
+Ao atualizar o `freetype2` pode gerar erro na inicialização do modelsim.
+```
+$ vsim
+Error in startup script:
+Initialization problem, exiting.
+Initialization problem, exiting.
+Initialization problem, exiting.
+   while executing
+"EnvHistory::Reset"
+   (procedure "PropertiesInit" line 3)
+   invoked from within
+"PropertiesInit"
+   invoked from within
+"ncFyP12 -+"
+   (file "/opt/questasim/linux_x86_64/../tcl/vsim/vsim" line 1)
+** Fatal: Read failure in vlm process (0,0)
+```
+
