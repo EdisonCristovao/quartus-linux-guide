@@ -103,7 +103,7 @@ Categories=Development
 
 ##Modelsim-Altera Edition
 
-###intall
+###install
 
 A instalação é feita junto com o quartus se voce baixou a versão completa. Caso tenha baixado em partes, é preciso dar permissão de execução e inciar a instalação.
 ```
